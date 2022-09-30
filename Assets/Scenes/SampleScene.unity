@@ -1529,7 +1529,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454993481}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.07, y: 3, z: 0}
+  m_LocalPosition: {x: -3.07, y: 3, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1980,7 +1980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60626da3aa6d444db8dc40cc97bd669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameBags: []
+  grabbedObject: {fileID: 863844713}
 --- !u!1001 &578906420
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2472,6 +2472,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7910751584512953435, guid: 20174655911d38942a5f699ba244653e, type: 3}
   m_PrefabInstance: {fileID: 1297903158}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &863844713 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+  m_PrefabInstance: {fileID: 7668277759897325890}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875f43c0da7d7424cb4d8a7d87aa2c7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &865251392 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7910751584512953435, guid: 20174655911d38942a5f699ba244653e, type: 3}
@@ -4325,7 +4336,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1463840197}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.3, y: 3, z: 0}
+  m_LocalPosition: {x: -8.3, y: 3, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6238,6 +6249,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: objectMatrix.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: objectMatrix.Array.data[4]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: objectMatrix.Array.data[5]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: objectMatrix.Array.data[6]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: objectMatrix.Array.data[7]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: objectMatrix.Array.data[8]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: objectMatrix.Array.data[9]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 198512031760002113, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: m_Name
       value: SwordObject

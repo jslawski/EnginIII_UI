@@ -39,7 +39,7 @@ public class GridGenerator : MonoBehaviour
             for (float j = 0; j < gridDimensions.x; j++)
             {
                 Vector3 transformPosition = new Vector3(this.startingPosition.x + j, 
-                                                            this.startingPosition.y - i, 0.0f);        
+                                                            this.startingPosition.y - i, -0.1f);        
 
                 this.gridTiles[processedTiles].position = transformPosition;
                 processedTiles++;

@@ -4,15 +4,32 @@ using UnityEngine;
 
 public class Bag : MonoBehaviour
 {
-    InventoryObject[,] bagContents;
+    private bool initialized = false;
+
+    private bool[,] bagContentFlags;
     
     public GridGenerator bindedGrid;
 
+    private List<InventoryObject> heldObjects;
+
     private void Awake()
     {
+        if (initialized == true)
+        {
+            return;
+        }
+
         this.bindedGrid = GetComponentInChildren<GridGenerator>();
-        
-        this.bagContents = new InventoryObject[(int)bindedGrid.gridDimensions.x, (int)bindedGrid.gridDimensions.y];
+        this.heldObjects = new List<InventoryObject>();
+
+        this.bagContentFlags = new bool[(int)bindedGrid.gridDimensions.x, (int)bindedGrid.gridDimensions.y];
+
+        this.initialized = true;
+    }
+
+    public void PlaceInBag(InventoryObject placedObject)
+    { 
+    
     }
 
     // Start is called before the first frame update
