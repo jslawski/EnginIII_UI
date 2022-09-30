@@ -87,9 +87,7 @@ public class InventoryObject : MonoBehaviour
 
         this.placed = true;
 
-        this.gameObject.transform.position = objectPosition;
-
-        this.PlaceObject();
+        this.gameObject.transform.position = objectPosition;        
     }
 
     public void MoveObject(Vector3 objectPosition, Vector2Int bagIndices)
@@ -183,7 +181,11 @@ public class InventoryObject : MonoBehaviour
 
         this.spriteSnapper.Snap(this.currentOrientation);
 
-        this.RotateObjectMatrix(clockwise, oldObjectDimensions);       
+        this.RotateObjectMatrix(clockwise, oldObjectDimensions);
+
+        this.highlighter.NotifyRotation(this.objectMatrix);
+
+        this.RefreshHighlightTiles();
     }
 
     private void RotateObjectMatrix(bool clockwise, Vector2Int oldObjectDimensions)
@@ -229,7 +231,7 @@ public class InventoryObject : MonoBehaviour
         }
     }
 
-    public void PlaceObject()
+    public void UnHighlightObject()
     {
         for (int i = 0; i < this.objectDimensions.y; i++)
         {

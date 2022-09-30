@@ -35,8 +35,35 @@ public class ObjectHighlightObserver : MonoBehaviour
             }
         }
     }
+    public void NotifyRotation(bool[,] objectMatrix)
+    {
+        for (int i = 0; i < this.tiles.GetLength(1); i++)
+        {
+            for (int j = 0; j < this.tiles.GetLength(0); j++)
+            {
+                Destroy(this.tiles[j, i].gameObject);                
+            }
+        }
+        
+        this.tiles = new HighlightTile[objectMatrix.GetLength(0), objectMatrix.GetLength(1)];
 
+        for (int i = 0; i < objectMatrix.GetLength(1); i++)
+        {
+            for (int j = 0; j < objectMatrix.GetLength(0); j++)
+            {
+                GameObject tileInstance =
+                    Instantiate(this.highlightTilePrefab, Vector3.zero, new Quaternion(), this.gameObject.transform);
+                tileInstance.transform.localPosition = new Vector3(tileInstance.transform.localPosition.x + j,
+                                                                   tileInstance.transform.localPosition.y - i,
+                                                                   0.0f);
 
+                HighlightTile highlightTileComponent = tileInstance.GetComponent<HighlightTile>();
+                highlightTileComponent.SetHighlighted();
+                this.tiles[j, i] = highlightTileComponent;
+            }
+        }
+    }
+    
 
     public void NotifyStateChange(Vector2Int tileIndex, ObjectState newState)
     {

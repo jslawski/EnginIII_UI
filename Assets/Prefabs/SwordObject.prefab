@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 875f43c0da7d7424cb4d8a7d87aa2c7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentOrientation: 0
+  objectName: 
+  placed: 0
   objectDimensions: {x: 1, y: 4}
   bagPositionIndices: {x: 0, y: 0}
 --- !u!1 &2951918219964642424
@@ -72,7 +73,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2951918219964642424}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -177,4 +178,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62fb336546d1bf14183e0c33a4b9e06a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snapped: 0

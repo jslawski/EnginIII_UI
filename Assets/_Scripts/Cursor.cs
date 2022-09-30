@@ -137,7 +137,7 @@ public class Cursor : MonoBehaviour
         {
             if (this.highlightedObject != null)
             {
-                this.highlightedObject.PlaceObject();
+                this.highlightedObject.UnHighlightObject();
                 this.highlightedObject = null;
             }
         }
@@ -152,7 +152,7 @@ public class Cursor : MonoBehaviour
         }
         else if (this.highlightedObject != potentialHighlightedObject)
         {
-            this.highlightedObject.PlaceObject();
+            this.highlightedObject.UnHighlightObject();
             this.highlightedObject = potentialHighlightedObject;
             this.highlightedObject.HighlightObject();
         }
