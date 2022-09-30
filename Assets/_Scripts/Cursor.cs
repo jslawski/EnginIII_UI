@@ -43,9 +43,15 @@ public class Cursor : MonoBehaviour
             return;
         }
 
-        if (this.currentPositionInBag.x < (this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.x - 1))
+        int targetIndex = this.currentPositionInBag.x + 1;
+        if (this.highlightedObject != null && this.grabbedObject == null)
         {
-            this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x + 1, this.currentPositionInBag.y);
+            targetIndex += this.highlightedObject.objectDimensions.x - 1;
+        }
+
+        if (targetIndex < this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.x)
+        {
+            this.currentPositionInBag = new Vector2Int(targetIndex, this.currentPositionInBag.y);
         }
         else if (this.currentAssociatedBag < (this.gameBags.Length - 1))
         {
@@ -67,9 +73,11 @@ public class Cursor : MonoBehaviour
 
     private void MoveLeft()
     {
-        if (this.currentPositionInBag.x > 0)
+        int targetIndex = this.currentPositionInBag.x - 1;
+
+        if (targetIndex >= 0)
         {
-            this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x - 1, this.currentPositionInBag.y);
+            this.currentPositionInBag = new Vector2Int(targetIndex, this.currentPositionInBag.y);
         }
         else if (this.currentAssociatedBag > 0)
         {
@@ -92,9 +100,11 @@ public class Cursor : MonoBehaviour
 
     private void MoveUp()
     {
-        if (this.currentPositionInBag.y > 0)
+        int targetIndex = this.currentPositionInBag.y - 1;
+
+        if (targetIndex >= 0)
         {
-            this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x, this.currentPositionInBag.y - 1);
+            this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x, targetIndex);
         }
         else
         { 
@@ -114,9 +124,15 @@ public class Cursor : MonoBehaviour
             return;
         }
 
-        if (this.currentPositionInBag.y < (this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.y - 1))
+        int targetIndex = this.currentPositionInBag.y + 1;
+        if (this.highlightedObject != null && this.grabbedObject == null)
         {
-            this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x, this.currentPositionInBag.y + 1);
+            targetIndex += this.highlightedObject.objectDimensions.y - 1;
+        }
+
+        if (targetIndex < this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.y)
+        {
+            this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x, targetIndex);
         }
         else
         {
@@ -145,6 +161,22 @@ public class Cursor : MonoBehaviour
         }
     }
 
+    private void AdjustCursorToHighlightedObject(Vector2Int targetIndices)
+    {
+        if (this.grabbedObject != null)
+        {
+            return;
+        }
+
+        this.currentPositionInBag = targetIndices;
+
+        Vector3 newPosition = new Vector3(this.gameBags[this.currentAssociatedBag].bindedGrid.startingPosition.x + this.currentPositionInBag.x,
+                                              this.gameBags[this.currentAssociatedBag].bindedGrid.startingPosition.y - this.currentPositionInBag.y,
+                                              this.cursorTransform.position.z);
+
+        this.cursorTransform.position = newPosition;
+    }
+
     private void HighlightPotentialObject()
     {
         InventoryObject potentialHighlightedObject = this.gameBags[this.currentAssociatedBag].GetContentAtIndex(this.currentPositionInBag);
@@ -165,12 +197,14 @@ public class Cursor : MonoBehaviour
         {
             this.highlightedObject = potentialHighlightedObject;
             this.highlightedObject.HighlightObject();
+            this.AdjustCursorToHighlightedObject(this.highlightedObject.bagPositionIndices);
         }
         else if (this.highlightedObject != potentialHighlightedObject)
         {
             this.highlightedObject.UnHighlightObject();
             this.highlightedObject = potentialHighlightedObject;
             this.highlightedObject.HighlightObject();
+            this.AdjustCursorToHighlightedObject(this.highlightedObject.bagPositionIndices);
         }
     }
 
@@ -259,7 +293,7 @@ public class Cursor : MonoBehaviour
                 this.PutDown();
             }
         }
-
+        
         if (this.grabbedObject != null || this.highlightedObject != null)
         {
             this.cursorSprite.enabled = false;
@@ -267,6 +301,6 @@ public class Cursor : MonoBehaviour
         else
         {
             this.cursorSprite.enabled = true;
-        }
+        }        
     }
 }
