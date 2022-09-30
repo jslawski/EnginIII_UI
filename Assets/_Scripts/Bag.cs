@@ -6,11 +6,9 @@ public class Bag : MonoBehaviour
 {
     private bool initialized = false;
 
-    private bool[,] bagContentFlags;
+    private InventoryObject[,] bagContentFlags;
     
     public GridGenerator bindedGrid;
-
-    private List<InventoryObject> heldObjects;
 
     private void Awake()
     {
@@ -20,16 +18,15 @@ public class Bag : MonoBehaviour
         }
 
         this.bindedGrid = GetComponentInChildren<GridGenerator>();
-        this.heldObjects = new List<InventoryObject>();
 
-        this.bagContentFlags = new bool[(int)bindedGrid.gridDimensions.x, (int)bindedGrid.gridDimensions.y];
+        this.bagContentFlags = new InventoryObject[(int)bindedGrid.gridDimensions.x, (int)bindedGrid.gridDimensions.y];
 
         this.initialized = true;
     }
 
-    public void PlaceInBag(InventoryObject placedObject)
+    public void PlaceInBag(InventoryObject placedObject, Vector2Int bagIndices)
     { 
-    
+        
     }
 
     // Start is called before the first frame update

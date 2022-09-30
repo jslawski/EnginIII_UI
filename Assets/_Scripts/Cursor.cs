@@ -12,7 +12,6 @@ public class Cursor : MonoBehaviour
 
     private int currentAssociatedBag = 0;
 
-    [SerializeField]
     private InventoryObject grabbedObject;
 
     private void Start()
@@ -21,7 +20,6 @@ public class Cursor : MonoBehaviour
         this.gameBags = this.gameObject.transform.parent.GetComponentsInChildren<Bag>();
         this.cursorTransform.position = new Vector3(this.gameBags[0].bindedGrid.startingPosition.x, 
                                                     this.gameBags[0].bindedGrid.startingPosition.y, -0.2f);
-        this.grabbedObject.gameObject.transform.position = this.cursorTransform.position;
     }
 
     private void MoveRight()
@@ -104,14 +102,14 @@ public class Cursor : MonoBehaviour
     private void MoveCursor()
     {
         Vector3 newPosition = new Vector3(this.gameBags[this.currentAssociatedBag].bindedGrid.startingPosition.x + this.currentPositionInBag.x,
-                                                            this.gameBags[this.currentAssociatedBag].bindedGrid.startingPosition.y - this.currentPositionInBag.y,
-                                                            this.cursorTransform.position.z);
+                                          this.gameBags[this.currentAssociatedBag].bindedGrid.startingPosition.y - this.currentPositionInBag.y,
+                                          this.cursorTransform.position.z);
 
         this.cursorTransform.position = newPosition;
 
         if (this.grabbedObject != null)
         {
-            this.grabbedObject.gameObject.transform.position = newPosition;
+            this.grabbedObject.gameObject.transform.position = new Vector3(newPosition.x, newPosition.y, -0.15f);
         }
     }
 
@@ -123,6 +121,11 @@ public class Cursor : MonoBehaviour
         }
 
         this.grabbedObject.Rotate(clockwise);
+    }
+
+    private void Interact()
+    { 
+        
     }
 
     // Update is called once per frame
@@ -151,6 +154,10 @@ public class Cursor : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             this.RotateObject(false);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            this.Interact();
         }
     }
 }

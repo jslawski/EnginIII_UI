@@ -6,8 +6,6 @@ public class SnapSprite : MonoBehaviour
 {
     Sprite objectSprite;
 
-    public bool snapped = false;
-
     // Start is called before the first frame update
     void Awake()
     {
