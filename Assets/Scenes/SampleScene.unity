@@ -6273,7 +6273,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: objectName
-      value: sword
+      value: bass
       objectReference: {fileID: 0}
     - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: objectDimensions.x
@@ -6313,7 +6313,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198512031760002113, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: m_Name
-      value: SwordObject
+      value: InventoryObject
       objectReference: {fileID: 0}
     - target: {fileID: 1186893125720529878, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: m_RootOrder

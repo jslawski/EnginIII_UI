@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class SnapSprite : MonoBehaviour
 {
-    Sprite objectSprite;
+    SpriteRenderer objectSprite;
 
     // Start is called before the first frame update
     void Awake()
     {
-        this.objectSprite = GetComponent<SpriteRenderer>().sprite;
+        this.objectSprite = GetComponent<SpriteRenderer>();
         this.Snap(Orientation.Deg0);
     }
 
@@ -17,11 +17,13 @@ public class SnapSprite : MonoBehaviour
     {
         if (newOrientation == Orientation.Deg0 || newOrientation == Orientation.Deg180)
         {
-            this.gameObject.transform.localPosition = new Vector3(this.objectSprite.bounds.extents.x, -this.objectSprite.bounds.extents.y, 0.0f);
+            this.gameObject.transform.localPosition = new Vector3(this.objectSprite.sprite.bounds.extents.x, 
+                -this.objectSprite.sprite.bounds.extents.y, 0.0f);
         }
         else
         {
-            this.gameObject.transform.localPosition = new Vector3(this.objectSprite.bounds.extents.y, -this.objectSprite.bounds.extents.x, 0.0f);
+            this.gameObject.transform.localPosition = new Vector3(this.objectSprite.sprite.bounds.extents.y, 
+                -this.objectSprite.sprite.bounds.extents.x, 0.0f);
         }
     }
 }

@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class HighlightTile : MonoBehaviour
 {
+    public bool isEmpty = false;
+    
     private SpriteRenderer tileSprite;
 
+    [SerializeField]
+    private Sprite emptySprite;
     [SerializeField]
     private Sprite placedSprite;
     [SerializeField]
@@ -18,6 +22,12 @@ public class HighlightTile : MonoBehaviour
     private void Awake()
     {
         this.tileSprite = GetComponent<SpriteRenderer>();        
+    }
+
+    public void SetEmpty()
+    {
+        this.tileSprite.sprite = emptySprite;
+        this.isEmpty = true;
     }
 
     public void SetPlaced()

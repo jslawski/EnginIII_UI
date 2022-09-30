@@ -37,9 +37,12 @@ public class InventoryObject : MonoBehaviour
 
         this.spriteTransform = this.transform.GetChild(0);
 
+        this.spriteSnapper = GetComponentInChildren<SnapSprite>();
+
         if (this.associatedBag == null)
         {            
             this.LoadObjectDetails();
+            this.spriteSnapper.Snap(Orientation.Deg0);
             this.highlighter.SetupHighlightTiles(this.objectMatrix);
 
             this.associatedBag = GameObject.Find("DropBag").GetComponent<Bag>();
@@ -49,8 +52,6 @@ public class InventoryObject : MonoBehaviour
                                                              -0.15f);
             this.PlaceObjectInBag(this.associatedBag.bindedGrid.startingPosition);
         }
-
-        this.spriteSnapper = GetComponentInChildren<SnapSprite>();
     }
 
     private void LoadObjectDetails()
@@ -87,7 +88,7 @@ public class InventoryObject : MonoBehaviour
 
         this.placed = true;
 
-        this.gameObject.transform.position = objectPosition;
+        this.gameObject.transform.position = new Vector3(objectPosition.x, objectPosition.y, -0.15f);
 
         this.HighlightObject();
     }

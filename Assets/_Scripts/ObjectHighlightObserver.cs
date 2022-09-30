@@ -30,7 +30,16 @@ public class ObjectHighlightObserver : MonoBehaviour
                                                                    0.0f);
                 
                 HighlightTile highlightTileComponent = tileInstance.GetComponent<HighlightTile>();
-                highlightTileComponent.SetPlaced();
+
+                if (objectMatrix[j, i] == true)
+                {
+                    highlightTileComponent.SetPlaced();
+                }
+                else
+                {
+                    highlightTileComponent.SetEmpty();
+                }
+
                 this.tiles[j, i] = highlightTileComponent;
             }
         }
@@ -58,7 +67,16 @@ public class ObjectHighlightObserver : MonoBehaviour
                                                                    0.0f);
 
                 HighlightTile highlightTileComponent = tileInstance.GetComponent<HighlightTile>();
-                highlightTileComponent.SetHighlighted();
+
+                if (objectMatrix[j, i] == true)
+                {
+                    highlightTileComponent.SetHighlighted();
+                }
+                else
+                {
+                    highlightTileComponent.SetEmpty();
+                }
+
                 this.tiles[j, i] = highlightTileComponent;
             }
         }
@@ -67,6 +85,11 @@ public class ObjectHighlightObserver : MonoBehaviour
 
     public void NotifyStateChange(Vector2Int tileIndex, ObjectState newState)
     {
+        if (this.tiles[tileIndex.x, tileIndex.y].isEmpty == true)
+        {
+            return;
+        }
+        
         switch (newState)
         {
             case ObjectState.Placed:
