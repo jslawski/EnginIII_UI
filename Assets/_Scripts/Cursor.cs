@@ -4,22 +4,33 @@ using UnityEngine;
 
 public class Cursor : MonoBehaviour
 {
+    private SpriteRenderer cursorSprite;
+    
     private Transform cursorTransform;
 
     private Bag[] gameBags;
 
-    private Vector2Int currentPositionInBag;
+    private Vector2Int currentPositionInBag = Vector2Int.zero;
 
     private int currentAssociatedBag = 0;
 
     private InventoryObject grabbedObject;
 
-    private void Start()
+    private InventoryObject highlightedObject;
+
+    private float grabOffset = 0.15f;
+
+    private IEnumerator Start()
     {
         this.cursorTransform = GetComponent<Transform>();
+        this.cursorSprite = GetComponentInChildren<SpriteRenderer>();
         this.gameBags = this.gameObject.transform.parent.GetComponentsInChildren<Bag>();
-        this.cursorTransform.position = new Vector3(this.gameBags[0].bindedGrid.startingPosition.x, 
+        this.cursorTransform.position = new Vector3(this.gameBags[0].bindedGrid.startingPosition.x,
                                                     this.gameBags[0].bindedGrid.startingPosition.y, -0.2f);
+
+        yield return null;
+
+        this.HighlightPotentialObject();
     }
 
     private void MoveRight()
@@ -109,7 +120,41 @@ public class Cursor : MonoBehaviour
 
         if (this.grabbedObject != null)
         {
-            this.grabbedObject.gameObject.transform.position = new Vector3(newPosition.x, newPosition.y, -0.15f);
+            Vector3 newObjectPosition = new Vector3(newPosition.x + this.grabOffset, newPosition.y + grabOffset, -0.15f);
+            this.grabbedObject.MoveObject(newObjectPosition, this.currentPositionInBag);
+        }
+        else
+        {
+            this.HighlightPotentialObject();
+        }
+    }
+
+    private void HighlightPotentialObject()
+    {
+        InventoryObject potentialHighlightedObject = this.gameBags[this.currentAssociatedBag].GetContentAtIndex(this.currentPositionInBag);
+
+        if (potentialHighlightedObject == null)
+        {
+            if (this.highlightedObject != null)
+            {
+                this.highlightedObject.PlaceObject();
+                this.highlightedObject = null;
+            }
+        }
+        else if (potentialHighlightedObject.placed == false)
+        {
+            return;
+        }
+        else if (this.highlightedObject == null)
+        {
+            this.highlightedObject = potentialHighlightedObject;
+            this.highlightedObject.HighlightObject();
+        }
+        else if (this.highlightedObject != potentialHighlightedObject)
+        {
+            this.highlightedObject.PlaceObject();
+            this.highlightedObject = potentialHighlightedObject;
+            this.highlightedObject.HighlightObject();
         }
     }
 
@@ -123,9 +168,33 @@ public class Cursor : MonoBehaviour
         this.grabbedObject.Rotate(clockwise);
     }
 
-    private void Interact()
-    { 
-        
+    private void PickUp()
+    {
+        InventoryObject potentialObject = this.gameBags[this.currentAssociatedBag].GetContentAtIndex(this.currentPositionInBag);
+
+        if (potentialObject != null)
+        {
+            Vector3 objectMovePosition = new Vector3(this.cursorTransform.position.x + this.grabOffset,
+                                                     this.cursorTransform.position.y + grabOffset, -0.15f);
+
+            this.grabbedObject = potentialObject;
+            this.grabbedObject.PickUpObject(objectMovePosition);
+        }
+        else
+        { 
+            //Play sound for invalid move
+        }
+    }
+
+    private void PutDown()
+    {
+        if (this.grabbedObject.IsValidDropSpot() == false)
+        {
+            return;
+        }
+
+        this.grabbedObject.PlaceObjectInBag(this.cursorTransform.position);
+        this.grabbedObject = null;
     }
 
     // Update is called once per frame
@@ -157,7 +226,23 @@ public class Cursor : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            this.Interact();
+            if (this.grabbedObject == null)
+            {
+                this.PickUp();
+            }
+            else
+            {
+                this.PutDown();
+            }
+        }
+
+        if (this.grabbedObject != null || this.highlightedObject != null)
+        {
+            this.cursorSprite.enabled = false;
+        }
+        else
+        {
+            this.cursorSprite.enabled = true;
         }
     }
 }

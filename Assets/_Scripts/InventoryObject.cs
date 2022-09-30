@@ -13,7 +13,7 @@ public class InventoryObject : MonoBehaviour
 
     private Transform spriteTransform;
 
-    private bool placed = false;
+    public bool placed = false;
     private Bag associatedBag = null;
 
     private SnapSprite spriteSnapper;
@@ -24,9 +24,9 @@ public class InventoryObject : MonoBehaviour
 
     [HideInInspector]
     public Vector2Int objectDimensions;
-    
+
     [HideInInspector]
-    public Vector2Int bagPositionIndices;
+    public Vector2Int bagPositionIndices = Vector2Int.zero;
 
     public bool[,] objectMatrix;
 
@@ -47,6 +47,7 @@ public class InventoryObject : MonoBehaviour
             this.gameObject.transform.position = new Vector3(this.associatedBag.bindedGrid.startingPosition.x,
                                                              this.associatedBag.bindedGrid.startingPosition.y,
                                                              -0.15f);
+            this.PlaceObjectInBag(this.associatedBag.bindedGrid.startingPosition);
         }
 
         this.spriteSnapper = GetComponentInChildren<SnapSprite>();
@@ -71,9 +72,57 @@ public class InventoryObject : MonoBehaviour
         this.associatedBag = newBag;
     }
 
-    public void PickUp()
+    public void PickUpObject(Vector3 objectPosition)
     {
+        this.associatedBag.RemoveFromBag(this);
         this.placed = false;
+        this.gameObject.transform.position = objectPosition;
+
+        this.RefreshHighlightTiles();
+    }
+
+    public void PlaceObjectInBag(Vector3 objectPosition)
+    {
+        this.associatedBag.PlaceInBag(this);
+
+        this.placed = true;
+
+        this.gameObject.transform.position = objectPosition;
+
+        this.PlaceObject();
+    }
+
+    public void MoveObject(Vector3 objectPosition, Vector2Int bagIndices)
+    {
+        this.gameObject.transform.position = objectPosition;
+        this.bagPositionIndices = bagIndices;
+
+        this.RefreshHighlightTiles();
+    }
+
+    private void RefreshHighlightTiles()
+    {
+        if (this.placed == true)
+        {
+            return;
+        }
+
+        for (int i = 0; i < this.objectDimensions.y; i++)
+        {
+            for (int j = 0; j < this.objectDimensions.x; j++)
+            {
+                Vector2Int currentObjectTile = new Vector2Int(j, i);
+                Vector2Int targetBagTile = new Vector2Int(this.bagPositionIndices.x + j, this.bagPositionIndices.y + i);
+                if (this.associatedBag.GetContentAtIndex(targetBagTile) == null)
+                {
+                    this.highlighter.NotifyStateChange(currentObjectTile, ObjectState.Valid);
+                }
+                else
+                {
+                    this.highlighter.NotifyStateChange(currentObjectTile, ObjectState.Invalid);
+                }
+            }
+        }
     }
 
     private void ForceDefaultOrientation()
@@ -168,9 +217,69 @@ public class InventoryObject : MonoBehaviour
         this.objectMatrix = transposedMatrix;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void HighlightObject()
     {
-        
+        for (int i = 0; i < this.objectDimensions.y; i++)
+        {
+            for (int j = 0; j < this.objectDimensions.x; j++)
+            {
+                Vector2Int index = new Vector2Int(j, i);
+                this.highlighter.NotifyStateChange(index, ObjectState.Highlighted);
+            }
+        }
+    }
+
+    public void PlaceObject()
+    {
+        for (int i = 0; i < this.objectDimensions.y; i++)
+        {
+            for (int j = 0; j < this.objectDimensions.x; j++)
+            {
+                Vector2Int index = new Vector2Int(j, i);
+                this.highlighter.NotifyStateChange(index, ObjectState.Placed);
+            }
+        }
+    }
+
+    public bool IsValidDropSpot()
+    {
+        for (int i = 0; i < this.objectDimensions.y; i++)
+        {
+            for (int j = 0; j < this.objectDimensions.x; j++)
+            {
+                Vector2Int targetBagTile = new Vector2Int(this.bagPositionIndices.x + j, this.bagPositionIndices.y + i);
+                if (this.associatedBag.GetContentAtIndex(targetBagTile) != null)
+                {
+                    return false;
+                }               
+            }
+        }
+
+        return true;
+    }
+
+    private void PrintObjectContents()
+    {
+        string debugString = this.gameObject.name + " Contents:\n";
+
+        for (int i = 0; i < this.objectDimensions.y; i++)
+        {
+            debugString += "[";
+            for (int j = 0; j < this.objectDimensions.x; j++)
+            {
+                debugString += (this.objectMatrix[j, i] == true) ? " 1 " : " 0 ";
+            }
+            debugString += "]\n";
+        }
+
+        Debug.LogError(debugString);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            this.PrintObjectContents();
+        }
     }
 }
