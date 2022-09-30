@@ -174,6 +174,12 @@ public class Cursor : MonoBehaviour
         }
     }
 
+    private void MoveOffset(Vector2Int offset)
+    {
+        this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x + offset.x, this.currentPositionInBag.y - offset.y);
+        this.MoveCursor();
+    }
+
     private void RotateObject(bool clockwise)
     {
         if (this.grabbedObject == null)
@@ -181,7 +187,9 @@ public class Cursor : MonoBehaviour
             return;
         }
 
-        this.grabbedObject.Rotate(clockwise);
+        Vector2Int clampOffset = this.grabbedObject.Rotate(clockwise);
+        this.MoveOffset(clampOffset);
+        this.grabbedObject.RefreshHighlightTiles();
     }
 
     private void PickUp()

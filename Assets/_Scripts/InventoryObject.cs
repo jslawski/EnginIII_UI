@@ -100,7 +100,7 @@ public class InventoryObject : MonoBehaviour
         this.RefreshHighlightTiles();
     }
 
-    private void RefreshHighlightTiles()
+    public void RefreshHighlightTiles()
     {
         if (this.placed == true)
         {
@@ -133,12 +133,29 @@ public class InventoryObject : MonoBehaviour
         }
     }
 
-    public void Rotate(bool clockwise)
+    private Vector2Int ClampAfterRotation()
+    {
+        int xOffset = 0;
+        int yOffset = 0;
+
+        if ((this.bagPositionIndices.x + this.objectDimensions.x) > this.associatedBag.bindedGrid.gridDimensions.x)
+        {
+            xOffset = this.associatedBag.bindedGrid.gridDimensions.x - (this.bagPositionIndices.x + this.objectDimensions.x);
+        }
+        if ((this.bagPositionIndices.y + this.objectDimensions.y) > this.associatedBag.bindedGrid.gridDimensions.y)
+        { 
+            yOffset = (this.bagPositionIndices.y + this.objectDimensions.y) - this.associatedBag.bindedGrid.gridDimensions.y;
+        }
+
+        return new Vector2Int(xOffset, yOffset);
+    }
+
+    public Vector2Int Rotate(bool clockwise)
     {
         if (this.objectDimensions.y > this.associatedBag.bindedGrid.gridDimensions.x)
         {
             //Play invalid sound
-            return;
+            return Vector2Int.zero;
         }
         
         Vector2Int oldObjectDimensions = this.objectDimensions;
@@ -187,7 +204,9 @@ public class InventoryObject : MonoBehaviour
 
         this.highlighter.NotifyRotation(this.objectMatrix);
 
-        this.RefreshHighlightTiles();
+        Vector2Int offset = this.ClampAfterRotation();
+
+        return offset;
     }
 
     private void RotateObjectMatrix(bool clockwise, Vector2Int oldObjectDimensions)
