@@ -35,12 +35,23 @@ public class Cursor : MonoBehaviour
 
     private void MoveRight()
     {
-        if (this.grabbedObject != null && this.currentAssociatedBag != 0 &&
+        if (this.grabbedObject != null && 
             (this.currentPositionInBag.x + this.grabbedObject.objectDimensions.x) >=
             this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.x)
         {
-            //Sound for invalid move
-            return;
+            if (this.currentAssociatedBag == 0)
+            {
+                this.currentAssociatedBag++;
+                this.currentPositionInBag = new Vector2Int(0, this.currentPositionInBag.y);
+                this.grabbedObject.ChangeBag(this.gameBags[this.currentAssociatedBag]);
+                MoveCursor();
+                return;
+            }
+            else
+            {
+                //Sound for invalid move
+                return;
+            }
         }
 
         int targetIndex = this.currentPositionInBag.x + 1;
@@ -73,6 +84,42 @@ public class Cursor : MonoBehaviour
 
     private void MoveLeft()
     {
+        if (this.grabbedObject != null && this.grabbedObject.objectDimensions.x > 1)
+        {
+            if (this.currentAssociatedBag != 0)
+            {
+                this.currentAssociatedBag--;
+
+                int xIndex = 0;
+                int yIndex = this.currentPositionInBag.y;
+
+                if (this.grabbedObject.objectDimensions.x > this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.x)
+                {
+                    RotateObject(true);
+                }
+
+                if ((this.grabbedObject.objectDimensions.y + yIndex) > this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.y)
+                {
+                    yIndex = (this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.y - this.grabbedObject.objectDimensions.x);
+                }
+
+                if (this.grabbedObject.objectDimensions.x > 0)
+                {
+                    xIndex = (this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.x - this.grabbedObject.objectDimensions.x);
+                }                
+
+                this.currentPositionInBag = new Vector2Int(xIndex, yIndex);
+                this.grabbedObject.ChangeBag(this.gameBags[this.currentAssociatedBag]);
+                MoveCursor();
+                return;
+            }
+            else
+            {
+                //Sound for invalid move
+                return;
+            }
+        }
+
         int targetIndex = this.currentPositionInBag.x - 1;
 
         if (targetIndex >= 0)
