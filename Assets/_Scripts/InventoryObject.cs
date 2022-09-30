@@ -87,7 +87,9 @@ public class InventoryObject : MonoBehaviour
 
         this.placed = true;
 
-        this.gameObject.transform.position = objectPosition;        
+        this.gameObject.transform.position = objectPosition;
+
+        this.HighlightObject();
     }
 
     public void MoveObject(Vector3 objectPosition, Vector2Int bagIndices)

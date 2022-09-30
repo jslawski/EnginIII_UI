@@ -35,6 +35,14 @@ public class Cursor : MonoBehaviour
 
     private void MoveRight()
     {
+        if (this.grabbedObject != null && this.currentAssociatedBag != 0 &&
+            (this.currentPositionInBag.x + this.grabbedObject.objectDimensions.x) >=
+            this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.x)
+        {
+            //Sound for invalid move
+            return;
+        }
+
         if (this.currentPositionInBag.x < (this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.x - 1))
         {
             this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x + 1, this.currentPositionInBag.y);
@@ -98,6 +106,14 @@ public class Cursor : MonoBehaviour
 
     private void MoveDown()
     {
+        if (this.grabbedObject != null &&
+            (this.currentPositionInBag.y + this.grabbedObject.objectDimensions.y) >=
+            this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.y)
+        {
+            //Sound for invalid move
+            return;
+        }
+
         if (this.currentPositionInBag.y < (this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.y - 1))
         {
             this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x, this.currentPositionInBag.y + 1);
