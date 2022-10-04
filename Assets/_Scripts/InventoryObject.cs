@@ -185,13 +185,14 @@ public class InventoryObject : MonoBehaviour
                 break;
             case Orientation.Deg90:                
                 finalRotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
+                shouldFlipY = true;
                 break;
             case Orientation.Deg180:
                 shouldFlipY = true;
                 break;
             case Orientation.Deg270:
                 finalRotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
-                shouldFlipY = true;
+                
                 break;
         }
 
