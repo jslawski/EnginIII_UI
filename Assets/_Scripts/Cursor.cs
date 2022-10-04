@@ -50,6 +50,7 @@ public class Cursor : MonoBehaviour
             else
             {
                 //Sound for invalid move
+                AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/invalid"), Camera.main.transform.position);
                 return;
             }
         }
@@ -75,8 +76,9 @@ public class Cursor : MonoBehaviour
             }
         }
         else
-        { 
+        {
             //Sound for invalid move
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/invalid"), Camera.main.transform.position);
         }
 
         this.MoveCursor();
@@ -88,8 +90,6 @@ public class Cursor : MonoBehaviour
 
         if (targetIndex >= 0)
         {
-            
-
             this.currentPositionInBag = new Vector2Int(targetIndex, this.currentPositionInBag.y);
         }
         else if (this.currentAssociatedBag > 0)
@@ -116,7 +116,6 @@ public class Cursor : MonoBehaviour
                 }
             }
 
-
             this.currentPositionInBag = new Vector2Int(xPos, yPos);
 
             if (this.grabbedObject != null)
@@ -127,6 +126,7 @@ public class Cursor : MonoBehaviour
         else
         {
             //Sound for invalid move
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/invalid"), Camera.main.transform.position);
         }
 
         this.MoveCursor();
@@ -141,8 +141,9 @@ public class Cursor : MonoBehaviour
             this.currentPositionInBag = new Vector2Int(this.currentPositionInBag.x, targetIndex);
         }
         else
-        { 
+        {
             //Sound for invalid move
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/invalid"), Camera.main.transform.position);
         }
 
         this.MoveCursor();
@@ -155,6 +156,7 @@ public class Cursor : MonoBehaviour
             this.gameBags[this.currentAssociatedBag].bindedGrid.gridDimensions.y)
         {
             //Sound for invalid move
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/invalid"), Camera.main.transform.position);
             return;
         }
 
@@ -171,6 +173,7 @@ public class Cursor : MonoBehaviour
         else
         {
             //Sound for invalid move
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/invalid"), Camera.main.transform.position);
         }
 
         this.MoveCursor();
@@ -193,6 +196,8 @@ public class Cursor : MonoBehaviour
         {
             this.HighlightPotentialObject();
         }
+
+        AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/move"), Camera.main.transform.position);
     }
 
     private void AdjustCursorToHighlightedObject(Vector2Int targetIndices)
@@ -209,6 +214,16 @@ public class Cursor : MonoBehaviour
                                               this.cursorTransform.position.z);
 
         this.cursorTransform.position = newPosition;
+    }
+
+    private void UnHighlightPotentialObject()
+    {
+        InventoryObject potentialHighlightedObject = this.gameBags[this.currentAssociatedBag].GetContentAtIndex(this.currentPositionInBag);
+
+        if (potentialHighlightedObject != null)
+        {
+            potentialHighlightedObject.UnHighlightObject();
+        }
     }
 
     private void HighlightPotentialObject()
@@ -258,6 +273,8 @@ public class Cursor : MonoBehaviour
         Vector2Int clampOffset = this.grabbedObject.Rotate(clockwise);
         this.MoveOffset(clampOffset);
         this.grabbedObject.RefreshHighlightTiles();
+
+        AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/rotate"), Camera.main.transform.position);
     }
 
     private void PickUp()
@@ -271,10 +288,13 @@ public class Cursor : MonoBehaviour
 
             this.grabbedObject = potentialObject;
             this.grabbedObject.PickUpObject(objectMovePosition);
+
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/place"), Camera.main.transform.position);
         }
         else
-        { 
+        {
             //Play sound for invalid move
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/invalid"), Camera.main.transform.position);
         }
     }
 
@@ -287,6 +307,33 @@ public class Cursor : MonoBehaviour
 
         this.grabbedObject.PlaceObjectInBag(this.cursorTransform.position);
         this.grabbedObject = null;
+
+        AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/place"), Camera.main.transform.position);
+    }
+
+    private void CleanupInventory()
+    {
+        //Destroy any currently held items
+        if (this.grabbedObject != null)
+        {
+            Destroy(this.grabbedObject.gameObject);
+        }
+
+        //Destroy any items current in the "drop" bag
+        this.gameBags[0].ClearBag();
+
+        //Unhighlight any currently highlighted objects
+        if (this.highlightedObject != null)
+        {
+            this.UnHighlightPotentialObject();
+        }
+
+        //Return cursor to default position
+        this.currentAssociatedBag = 0;
+        this.currentPositionInBag = Vector2Int.zero;
+        this.MoveCursor();
+
+        this.gameObject.transform.parent.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -327,7 +374,12 @@ public class Cursor : MonoBehaviour
                 this.PutDown();
             }
         }
-        
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            this.CleanupInventory();
+        }
+
         if (this.grabbedObject != null || this.highlightedObject != null)
         {
             this.cursorSprite.enabled = false;

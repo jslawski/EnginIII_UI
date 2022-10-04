@@ -6,8 +6,7 @@ public enum Orientation { Deg0, Deg90, Deg180, Deg270 }
 
 public class InventoryObject : MonoBehaviour
 {
-    [SerializeField]
-    private string objectName;
+    public string objectName;
 
     private Orientation currentOrientation = Orientation.Deg0;
 
@@ -88,7 +87,7 @@ public class InventoryObject : MonoBehaviour
 
         this.placed = true;
 
-        this.gameObject.transform.position = new Vector3(objectPosition.x, objectPosition.y, -0.15f);
+        this.gameObject.transform.position = new Vector3(objectPosition.x, objectPosition.y, -0.15f);        
 
         this.HighlightObject();
     }
@@ -156,6 +155,7 @@ public class InventoryObject : MonoBehaviour
         if (this.objectDimensions.y > this.associatedBag.bindedGrid.gridDimensions.x)
         {
             //Play invalid sound
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Audio/invalid"), Camera.main.transform.position);
             return Vector2Int.zero;
         }
         

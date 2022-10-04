@@ -10,7 +10,6 @@ public static class InventoryObjectDetailsDict
     {
         dict = new Dictionary<string, InventoryObjectDetails>();
 
-        Debug.LogError("SetupDictionary");
         Axe();
         Bass();
         Boomerang();

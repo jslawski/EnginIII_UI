@@ -39,6 +39,8 @@ public class Bag : MonoBehaviour
                 }
             }
         }
+
+        placedObject.transform.parent = this.gameObject.transform;
     }
 
     public void RemoveFromBag(InventoryObject removedObject)
@@ -61,6 +63,21 @@ public class Bag : MonoBehaviour
     public InventoryObject GetContentAtIndex(Vector2Int indices)
     {
         return (this.bagContentFlags[indices.x, indices.y]);
+    }
+
+    public void ClearBag()
+    {
+        for (int i = 0; i < this.bindedGrid.gridDimensions.y; i++)
+        {
+            for (int j = 0; j < this.bindedGrid.gridDimensions.x; j++)
+            {
+                if (this.bagContentFlags[j, i] != null)
+                {
+                    Destroy(this.bagContentFlags[j, i].gameObject);
+                    this.RemoveFromBag(this.bagContentFlags[j, i]);
+                }
+            }
+        }
     }
 
     private void PrintBagContents()
