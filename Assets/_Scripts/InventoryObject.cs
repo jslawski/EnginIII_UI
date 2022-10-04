@@ -276,11 +276,14 @@ public class InventoryObject : MonoBehaviour
         {
             for (int j = 0; j < this.objectDimensions.x; j++)
             {
-                Vector2Int targetBagTile = new Vector2Int(this.bagPositionIndices.x + j, this.bagPositionIndices.y + i);
-                if (this.associatedBag.GetContentAtIndex(targetBagTile) != null)
+                if (this.objectMatrix[j, i] == true)
                 {
-                    return false;
-                }               
+                    Vector2Int targetBagTile = new Vector2Int(this.bagPositionIndices.x + j, this.bagPositionIndices.y + i);
+                    if (this.associatedBag.GetContentAtIndex(targetBagTile) != null)
+                    {
+                        return false;
+                    }
+                }
             }
         }
 

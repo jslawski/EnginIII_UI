@@ -99,6 +99,11 @@ public class Shop : MonoBehaviour
         {
             this.OpenInventory();
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     private void OpenInventory()
