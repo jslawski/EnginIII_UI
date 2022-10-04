@@ -177,8 +177,10 @@ public class InventoryObject : MonoBehaviour
         }
 
         Quaternion finalRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-        bool shouldFlipY = false;
 
+        bool shouldFlipX = false;
+        bool shouldFlipY = false;
+        
         switch (this.currentOrientation)
         {
             case Orientation.Deg0:                
@@ -186,18 +188,20 @@ public class InventoryObject : MonoBehaviour
             case Orientation.Deg90:                
                 finalRotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
                 shouldFlipY = true;
+                shouldFlipX = true;
                 break;
             case Orientation.Deg180:
                 shouldFlipY = true;
+                shouldFlipX = true;
                 break;
             case Orientation.Deg270:
-                finalRotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
-                
+                finalRotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);                
                 break;
         }
 
         this.spriteTransform.rotation = finalRotation;
-                
+
+        this.objectSprite.flipX = shouldFlipX;
         this.objectSprite.flipY = shouldFlipY;
 
         this.spriteSnapper.Snap(this.currentOrientation);
