@@ -6273,7 +6273,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: objectName
-      value: bass
+      value: pickaxe
       objectReference: {fileID: 0}
     - target: {fileID: 53066329565515132, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: objectDimensions.x
@@ -6362,6 +6362,14 @@ PrefabInstance:
     - target: {fileID: 2126311240836245005, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437049508573647810, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2a1eec056326a7b4c9e04ba20588730e, type: 3}
+    - target: {fileID: 4437049508573647810, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4699763633149036170, guid: 27086fde4f365ca408885778b50ad7a3, type: 3}
       propertyPath: m_LocalPosition.z
